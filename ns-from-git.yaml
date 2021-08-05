@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ns-from-git
+  labels:
+    env: "dev"
+  annotations:
+    a1: "v1"
+    a2: "v2"
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: rq-sample
+spec:
+  hard:
+    configmaps: "5"
+    persistentvolumeclaims: "10"
+    pods: "15"
+    replicationcontrollers: "25"
+    secrets: "10"
+    services: "10"
+    services.loadbalancers: "2"
+    requests.cpu: "1"
+    requests.memory: 1Gi
+    limits.cpu: "2"
+    limits.memory: 2Gi
+    requests.nvidia.com/gpu: 4
+---
+apiVersion: "v1"
+kind: "LimitRange"
+metadata:
+  name: limitrange-sample 
+spec:
+  limits:
+    - type: "Pod"
+      max:
+        cpu: "2" 
+        memory: "1Gi" 
+      min:
+        cpu: "200m" 
+        memory: "6Mi" 
+    - type: "Container"
+      max:
+        cpu: "2" 
+        memory: "1Gi" 
+      min:
+        cpu: "100m" 
+        memory: "4Mi" 
+      default:
+        cpu: "300m" 
+        memory: "200Mi" 
+      defaultRequest:
+        cpu: "200m" 
+        memory: "100Mi" 
+      maxLimitRequestRatio:
+        cpu: "10"
